@@ -315,3 +315,54 @@ helm search repo repo-name [package-name]
 ```shell
 helm install name package-name
 ```
+
+## [KubeVirt](https://kubevirt.io/)
+
+### Installation
+
+#### Deploy KubeVirt operator
+
+```shell
+export VERSION=$(curl -s https://api.github.com/repos/kubevirt/kubevirt/releases | grep tag_name | grep -v -- '-rc' | sort -r | head -1 | awk -F': ' '{print $2}' | sed 's/,//' | xargs)
+echo $VERSION
+kubectl create -f https://github.com/kubevirt/kubevirt/releases/download/${VERSION}/kubevirt-operator.yaml
+```
+
+#### If nested virtualization cannot be enabled do enable KubeVirt emulation
+
+```shell
+kubectl -n kubevirt patch kubevirt kubevirt --type=merge --patch '{"spec":{"configuration":{"developerConfiguration":{"useEmulation":true}}}}'
+```
+
+#### Deploy KubeVirt custom resource definition
+
+```shell
+kubectl create -f https://github.com/kubevirt/kubevirt/releases/download/${VERSION}/kubevirt-cr.yaml
+```
+
+#### Verify components
+
+- deployement
+
+```shell
+kubectl get kubevirt.kubevirt.io/kubevirt -n kubevirt -o=jsonpath="{.status.phase}"
+```
+
+- compoents
+
+```shell
+kubectl get all -n kubevirt
+```
+
+### Virtctl
+
+```shell
+VERSION=$(kubectl get kubevirt.kubevirt.io/kubevirt -n kubevirt -o=jsonpath="{.status.observedKubeVirtVersion}")
+ARCH=$(uname -s | tr A-Z a-z)-$(uname -m | sed 's/x86_64/amd64/') || windows-amd64.exe
+echo ${ARCH}
+curl -L -o virtctl https://github.com/kubevirt/kubevirt/releases/download/${VERSION}/virtctl-${VERSION}-${ARCH}
+chmod +x virtctl
+sudo install virtctl /usr/local/bin
+```
+
+Refers ___https://kubevirt.io/labs/kubernetes/lab1___ for how to use Virtctl
