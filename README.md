@@ -365,4 +365,4 @@ chmod +x virtctl
 sudo install virtctl /usr/local/bin
 ```
 
-Refers ___https://kubevirt.io/labs/kubernetes/lab1___ for how to use Virtctl
+Refers ___https://kubevirt.io/labs/kubernetes/lab1___ for how to use Virtctl. And ___https://kubevirt.io/user-guide/virtual_machines/virtual_machine_instances/___ on more in-depth into creation of virtual machines.
