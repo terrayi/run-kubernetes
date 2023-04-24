@@ -254,6 +254,12 @@ kubectl proxy --port=8080
 
 can acccess at ___http://localhost:8080/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/___
 
+If accessing from outside of the machine is required, should supply address and accept-hosts arguments, but it requires SSL connection which is outside of the scope and please refer to documentation to enable HTTPS.
+
+```shell
+kubectl proxy --address='0.0.0.0' --port=8002 --accept-hosts='.*'
+```
+
 *** The reason the port is set specifically to 8080 is to run k9s.
 
 ### Create a bearer token
